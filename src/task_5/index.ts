@@ -17,11 +17,11 @@ export class BankController{
         this.Vaults = new Array<Vault>();
     }
     public static getInstance() : BankController {
-        if (this.instance === null) {
+        if (!this.instance) {
             this.instance = new BankController();
-        } else { 
-        return this.instance;
         }
+        
+        return this.instance;       
     }
     public registerVault(): ISecureVaultRequisites{
         const vault = new Vault();

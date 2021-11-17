@@ -18,15 +18,10 @@ export class Currency{
         }        
         this.name = name;
         this._value = value;
-        this.unit = unit;
+        this.unit = unit;       
         if (!type) {           
-            for (let i = 1; i < 4; i++) {
-                if (Names[i - 1].includes(name)) {
-                    this.Type = i;
-                    break;
-                }               
-            }
-            if (!this.Type) {
+            this.Type = Names.indexOf(Names.find(element => element.includes(name)))
+            if (!Number.isFinite(this.Type)) {
                 throw new Error('Такой валюты не существует');
             }
         } else {
@@ -34,10 +29,10 @@ export class Currency{
         }
     }
 
-    get value() {
+    public get value() {
         return this._value;
     }
-    set value(newValue: number) {
+    public set value(newValue: number) {
         if (newValue >= 0) {
             this._value = newValue;
         } else {
@@ -47,9 +42,9 @@ export class Currency{
 }
 
 export enum CurrencyType {
-    Material = 1,
-    Crypto = 2,
-    Metal = 3,   
+    Material,
+    Crypto,
+    Metal   
 }
 
 const MaterialCurrencyNames = ['ru', 'Dollar', 'Ruble'];

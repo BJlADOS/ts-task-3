@@ -15,33 +15,39 @@ export class Vault implements ISecureVaultRequisites{
         Vault.lastId++;
     }
     public withdraw(currency: Currency) : void {
-        let has = false;
-        this.store.forEach(curr => {
-            if (!has && curr.name === currency.name) {
-                has = true;
-                if (curr.value >= currency.value) {
-                    curr.value -= currency.value;                    
-                } else {
-                    throw new Error('Суммы недостаточно');
+        try {
+            this.store.forEach(curr => {
+                if (curr.name === currency.name) {
+                    if (curr.value >= currency.value) {
+                        curr.value -= currency.value;
+                        throw new Error();                    
+                    } else {
+                        throw new Error('Суммы недостаточно');
+                    }
                 }
+            });
+        } catch(e) {
+            if((e as Error).message) {
+                throw new Error('Суммы недостаточно');
             }
-        });
-        if(!has) {
-            throw new Error('Нету такой валюты в хранилище')
+
+            return;
         }
+        throw new Error('Нету такой валюты в хранилище')        
     }
 
     public deposit(currency: Currency) : void {
-        let has = false;
-        this.store.forEach(curr => {
-            if (!has && curr.name === currency.name) {
-                has = true;
-                curr.value += currency.value;                    
-            }
-        });
-        if(!has) {
-            this.store.add(currency);
+        try {
+            this.store.forEach(curr => {
+                if (curr.name === currency.name) {
+                     curr.value += currency.value;
+                     throw new Error();                    
+                }
+            });
+        } catch {
+            return;        
         }
+        this.store.add(currency); 
     }
 
     public transfer(currency: Currency, vault: Vault) : void {
